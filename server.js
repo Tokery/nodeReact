@@ -14,11 +14,18 @@ server.use(sassMiddleware({
 server.set('view engine', 'ejs');
 //server.set('views', path.join(__dirname, 'views'));
 
-import './serverRender'
+import serverRender from './serverRender';
+
 server.get('/', (req, res) => {
-    res.render('index', {
-        content: 'Hello Express and EJS!'
-    });
+    serverRender()
+    .then(( { initialMarkup, initialData } ) => {
+        res.render('index', {
+            initialMarkup,
+            initialData
+        });
+    })
+    .catch(console.error);
+
 });
 
 server.use('/api', apiRouter);
